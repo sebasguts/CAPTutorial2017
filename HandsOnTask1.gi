@@ -248,10 +248,10 @@ end;
 AddKernelEmbedding( vecspaces, kernel_emb );
 
 ##
-lift_along_monomorphism := function( monomorphism, test_morphism )
+lift := function( alpha, beta )
     local solution;
     
-    solution := RightDivide( UnderlyingMatrix( test_morphism ), UnderlyingMatrix( monomorphism ) );
+    solution := RightDivide( UnderlyingMatrix( alpha ), UnderlyingMatrix( beta ) );
     
     if solution = fail then
         
@@ -259,13 +259,13 @@ lift_along_monomorphism := function( monomorphism, test_morphism )
         
     fi;
     
-    return QVectorSpaceMorphism( Source( test_morphism ),
+    return QVectorSpaceMorphism( Source( alpha ),
            solution,
-           Source( monomorphism ) );
+           Source( beta ) );
     
 end;
 
-AddLiftAlongMonomorphism( vecspaces, lift_along_monomorphism );
+AddLift( vecspaces, lift );
 
 ##
 cokernel_proj := function( morphism )
@@ -277,24 +277,13 @@ end;
 AddCokernelProjection( vecspaces, cokernel_proj );
 
 ##
-colift_along_epimorphism := function( epimorphism, test_morphism )
-    local solution;
+colift := function( alpha, beta )
     
-    solution := LeftDivide( UnderlyingMatrix( epimorphism ), UnderlyingMatrix( test_morphism ) );
-    
-    if solution = fail then
-        
-        return fail;
-        
-    fi;
-    
-    return QVectorSpaceMorphism( Range( epimorphism ),
-              solution,
-              Range( test_morphism ) );
+    ## write your code here
     
 end;
 
-AddColiftAlongEpimorphism( vecspaces, colift_along_epimorphism );
+AddColift( vecspaces, colift );
 
 ##
 zero_object := function( )

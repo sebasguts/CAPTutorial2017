@@ -523,57 +523,57 @@ Finalize( vecspaces );
 ##
 #################################
 
-# # Creating objects and morphisms
-# 
-# V := QVectorSpace( 2 );
-# 
-# CapCategory( V );
-# 
-# Dimension( V );
-# 
-# W := QVectorSpace( 3 );
-# 
-# alpha := QVectorSpaceMorphism( V, [ [ 1, 1, 1 ], [ -1, -1, -1 ] ], W );
-# 
-# CapCategory( alpha );
-# 
-# UnderlyingMatrix( alpha );
-# 
-# # Testing the KernelEmbedding
-# 
-# KernelEmbedding( alpha );
-# 
-# KernelObject( alpha );
-# 
-# # Computing an intersection
-# 
-# M1 := QVectorSpace( 2 );
-# 
-# M2 := QVectorSpace( 2 );
-# 
-# N := QVectorSpace( 3 );
-# 
-# iota1 := QVectorSpaceMorphism( M1, [ [ 1, 0, 0 ], [ 0, 1, 1 ] ], N );
-# 
-# IsMonomorphism( iota1 );
-# 
-# iota2 := QVectorSpaceMorphism( M2, [ [ 1, 1, 0 ], [ 0, 0, 1 ] ], N );
-# 
-# IsMonomorphism( iota2 );
-# 
-# pi1 := ProjectionInFactorOfDirectSum( [ M1, M2 ], 1 );
-# 
-# pi2 := ProjectionInFactorOfDirectSum( [ M1, M2 ], 2 );
-# 
-# lambda := PostCompose( iota1, pi1 );
-# 
-# phi := lambda - PostCompose( iota2, pi2 );
-# 
-# kappa := KernelEmbedding( phi );
-# 
-# PostCompose( lambda, kappa );
-# 
-# PreCompose( ProjectionInFactorOfFiberProduct( [ beta, gamma ], 1 ), beta );
+# Creating objects and morphisms
+
+V := QVectorSpace( 2 );
+
+CapCategory( V );
+
+Dimension( V );
+
+W := QVectorSpace( 3 );
+
+alpha := QVectorSpaceMorphism( V, [ [ 1, 1, 1 ], [ -1, -1, -1 ] ], W );
+
+CapCategory( alpha );
+
+UnderlyingMatrix( alpha );
+
+# Testing the KernelEmbedding
+
+KernelEmbedding( alpha );
+
+KernelObject( alpha );
+
+# Computing an intersection
+
+M1 := QVectorSpace( 2 );
+
+M2 := QVectorSpace( 2 );
+
+N := QVectorSpace( 3 );
+
+iota1 := QVectorSpaceMorphism( M1, [ [ 1, 0, 0 ], [ 0, 1, 1 ] ], N );
+
+IsMonomorphism( iota1 );
+
+iota2 := QVectorSpaceMorphism( M2, [ [ 1, 1, 0 ], [ 0, 0, 1 ] ], N );
+
+IsMonomorphism( iota2 );
+
+pi1 := ProjectionInFactorOfDirectSum( [ M1, M2 ], 1 );
+
+pi2 := ProjectionInFactorOfDirectSum( [ M1, M2 ], 2 );
+
+lambda := PostCompose( iota1, pi1 );
+
+phi := lambda - PostCompose( iota2, pi2 );
+
+kappa := KernelEmbedding( phi );
+
+PostCompose( lambda, kappa );
+
+PreCompose( ProjectionInFactorOfFiberProduct( [ iota1, iota2 ], 1 ), iota1 );
 
 #################################
 ##
@@ -581,5 +581,33 @@ Finalize( vecspaces );
 ##
 #################################
 
-## write your code here
+HomologyObject := function( alpha, beta )
+  local iota, lambda;
+  
+  if not IsZero( PreCompose( alpha, beta ) ) then
+      
+      Error( "the composition of the given morphisms has to be zero" );
+      
+  fi;
+  
+  iota := ImageEmbedding( alpha );
+  
+  lambda := KernelLift( beta, iota );
+  
+  return CokernelObject( lambda );
+  
+end;
 
+HomologyObject( alpha, CokernelProjection( alpha ) );
+
+HomologyObject( KernelEmbedding( alpha ), alpha );
+
+pi1 := ProjectionInFactorOfDirectSum( [ V, V, V ], 1 );
+
+iota1 := InjectionOfCofactorOfDirectSum( [ V, V, V ], 1 );
+
+pi2 := ProjectionInFactorOfDirectSum( [ V, V, V ], 2 );
+
+iota2 := InjectionOfCofactorOfDirectSum( [ V, V, V ], 2 );
+
+HomologyObject( PreCompose( pi1, iota1 ), PreCompose( pi2, iota2 ) );
